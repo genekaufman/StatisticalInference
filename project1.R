@@ -16,5 +16,6 @@ sd_exp_means <- sd(exp_means)
 mean_exp_sd <- mean(exp_sd)
 
 var_exp_dist <- var(exp_dist)
+sd_exp_dist <- sd(exp_dist)
 
 hist(var_exp_dist)
