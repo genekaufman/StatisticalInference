@@ -1,0 +1,163 @@
+---
+title: "Comparison of the Exponential Distribution with the Central Limit Theoreom"
+author: "Gene Kaufman"
+date: "February 7, 2016"
+output: html_document
+---
+
+#Overview
+The Exponential Distribution can be simulated with the R function *rexp(n, lambda)*, where lambda is the rate parameter. The mean of exponential distribution is 1/lambda and the standard deviation is also 1/lambda. Using lambda = 0.2, I will investigate the distribution of 1000 simulations of size 40 exponentials and compare to the Central Limit Theorem.
+
+#Simulations 
+First, load some libraries and set some options
+```{r setoptions, message=FALSE}
+require(knitr)
+opts_chunk$set(echo=TRUE, results="asis", warning=FALSE, message=FALSE)
+```
+
+Initialize Variables
+```{r, init.vars,cache=TRUE}
+lambda <- 0.2
+n <- 40
+num_sims <- 1000
+```
+
+Create Simulations
+```{r, run.simul.1,cache=TRUE}
+set.seed(42) # Reproducibility!
+```
+
+Build matrix of `r num_sims` simulations of `r n` Exponentials
+```{r, run.simul.2,cache=TRUE}
+exp_dist <- matrix(rexp(n * num_sims,lambda),num_sims)
+```
+
+Calculate means of the simulations
+```{r, run.simul.3,cache=TRUE}
+exp_means <- apply(exp_dist, MARGIN=1,FUN=mean)
+```
+
+#Sample Mean versus Theoretical Mean: 
+The Theoretical Mean of the Exponential Distribution is *1/lambda*
+```{r compare1}
+theory_mean <- 1/lambda
+```
+
+The average Sample Mean:
+```{r compare2}
+avg_sample_mean <- mean(exp_means)
+```
+
+Theoretical mean: `r theory_mean`, Sample mean: `r avg_sample_mean`
+
+Plotting everything onto one chart makes it easy to compare that the Sample Mean and Theoretical Mean are pretty close:
+```{r chart1, echo=FALSE}
+theory_sd <- 1/lambda
+numBreaks <- 100
+# plot the averages as density probabilities
+hist(exp_means
+     ,probability=TRUE
+     ,breaks = numBreaks
+     ,xlab="Means"
+     ,main="Exponential Distribution:\nSimulated Sample Means vs Theoretical Means"
+     )
+
+# add density plot of simulated sample means
+lines(density(exp_means),lty=1)
+
+# restructure theoretical mean to create a density plot on
+# the same scale as the simulated sample means
+xfit <- seq(min(exp_means), max(exp_means)
+            , length=numBreaks
+            )
+yfit <- dnorm(xfit, mean=theory_mean, sd=(theory_sd/sqrt(n)))
+lines(xfit, yfit
+      , lty=2
+      )
+
+# add a vertical line at the theoretical mean
+abline(v=theory_mean, lwd=3)
+
+# add legend
+legend('topright'
+       , c("Theoretical","Simulated Samples")
+       , lty=c(2,1)
+       , cex=0.6
+       , bty="n"
+       )
+```
+
+
+#Sample Variance versus Theoretical Variance: 
+The Theoretical Variance of the Exponential Distribution is the square of the Theoretical SD: *(1/lambda)^2* or *theory_sd^2*  
+```{r compare2_1}
+theory_sd <- 1/lambda
+theory_var <- theory_sd ^ 2
+
+```
+However, we're comparing to a sample, so we have to account for the sample size:
+```{r compare2_1a}
+theory_sd_samp <- theory_sd / sqrt(n)
+theory_var_samp <- theory_sd_samp ^ 2
+```
+
+Calculate variances of the simulations
+```{r, run.simul.4,cache=TRUE}
+exp_var <- apply(exp_dist, MARGIN=1,FUN=var)
+```
+
+The average Sample Variance:
+```{r compare2_2}
+avg_sample_var <- mean(exp_var)
+```
+
+Theoretical Variance: `r theory_var_samp`, Sample Variance: `r avg_sample_var`
+
+```{r chart2, echo=FALSE}
+######################### VAR ###########
+#theory_sd <- 1/lambda
+numBreaks <- 100
+# plot the averages as density probabilities
+hist(exp_var
+     ,probability=TRUE
+     ,breaks = numBreaks
+     ,xlab="Variance"
+     ,main="Exponential Distribution:\nSimulated Sample Variance vs Theoretical Variance"
+)
+
+# add density plot of simulated sample variances
+lines(density(exp_var),lty=1)
+
+# restructure theoretical variance to create a density plot on
+# the same scale as the simulated sample variance
+xfit <- seq(min(exp_var), max(exp_var)
+            , length=numBreaks
+)
+yfit <- dnorm(xfit, mean=theory_var_samp, sd=theory_sd_samp)
+lines(xfit, yfit
+      , lty=2
+)
+
+# add a vertical line at the theoretical var
+abline(v=theory_var_samp, lwd=3)
+
+# add legend
+legend('topright'
+       , c("Theoretical","Simulated Samples")
+       , lty=c(2,1)
+       , cex=0.6
+       , bty="n"
+)
+```
+
+#Distribution: 
+Explain how the distribution is approximately normal.
+
+Here is a histogram of the 
+```{r chart3}
+hist(exp_dist)
+
+hist(exp_means)
+```
+
+Via figures and text, explain how one can tell the distribution is approximately normal.
