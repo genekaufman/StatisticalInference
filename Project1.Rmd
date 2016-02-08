@@ -2,7 +2,7 @@
 title: "Comparison of the Exponential Distribution with the Central Limit Theoreom"
 author: "Gene Kaufman"
 date: "February 7, 2016"
-output: html_document
+output: pdf_document
 ---
 
 #Overview
@@ -108,62 +108,20 @@ avg_sample_var_means <- var(exp_means)
 
 Theoretical Variance: `r theory_var_samp`, 
 
-Sample Variance Means: `r avg_sample_var_means`
+Average of Sample Variance Means: `r avg_sample_var_means`
 
 
-```{r chart2, echo=FALSE}
-
-exp_var <- apply(exp_dist, MARGIN=1,FUN=var)
-
-######################### VAR ###########
-#theory_sd <- 1/lambda
-numBreaks <- 50
-# plot the averages as density probabilities
-hist(exp_var
-     ,probability=TRUE
-     ,breaks = numBreaks
-     ,xlab="Variance"
-     ,main="Exponential Distribution:\nSimulated Sample Variance vs Theoretical Variance"
-)
-
-# add density plot of simulated sample variances
-lines(density(exp_var),lty=1)
-
-# restructure theoretical variance to create a density plot on
-# the same scale as the simulated sample variance
-xfit <- seq(min(exp_var), max(exp_var)
-            , length=numBreaks
-)
-yfit <- dnorm(xfit, mean=theory_var_samp, sd=theory_sd_samp)
-lines(xfit, yfit
-      , lty=2
-)
-
-yfit <- dnorm(xfit, mean=theory_var, sd=(theory_sd/sqrt(n)))
-lines(xfit, yfit
-      , lty=3
-)
-
-# add a vertical line at the theoretical var
-abline(v=theory_var_samp, lwd=3)
-
-# add legend
-legend('topright'
-       , c("2","Theoretical","Simulated Samples")
-       , lty=c(3,2,1)
-       , cex=0.6
-       , bty="n"
-)
-```
 
 #Distribution: 
-Explain how the distribution is approximately normal.
+Explain how the distribution is approximately normal. The Central Limit Theoreom states that the mean of large number of iterations of a distribution will be approximately normally distributed. Here we can see that the histogram of 
+means has a very Gaussian look, centered around the distribution mean
 
-Here is a histogram of the 
 ```{r chart3}
-hist(exp_dist)
+hist(exp_means,
+     main=paste("Means from Exponential Distribution:\nSimulations:", num_sims , "\nSample Size:", n ,"\nRate:", lambda),
+     xlab="Means",
+     breaks=20)
+# add a vertical line at the theoretical mean
+abline(v=theory_mean, lwd=3)
 
-hist(exp_means)
 ```
-
-Via figures and text, explain how one can tell the distribution is approximately normal.
