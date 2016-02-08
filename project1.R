@@ -105,6 +105,12 @@ legend('topright'
        , bty="n"
        )
 
+theory_sd <- 1/lambda
+theory_var <- theory_sd ^ 2
+theory_sd_samp <- theory_sd / sqrt(n)
+theory_var_samp <- theory_sd_samp ^ 2
+avg_sample_var <- mean(exp_var)
+avg_sample_var_means <- var(exp_means)
 
 ######################### VAR ###########
 #theory_sd <- 1/lambda
