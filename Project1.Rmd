@@ -51,6 +51,7 @@ avg_sample_mean <- mean(exp_means)
 Theoretical mean: `r theory_mean`, Sample mean: `r avg_sample_mean`
 
 Plotting everything onto one chart makes it easy to compare that the Sample Mean and Theoretical Mean are pretty close:
+
 ```{r chart1, echo=FALSE}
 theory_sd <- 1/lambda
 numBreaks <- 100
@@ -112,13 +113,14 @@ Average of Sample Variance Means: `r avg_sample_var_means`
 
 
 
-#Distribution: 
-Explain how the distribution is approximately normal. The Central Limit Theoreom states that the mean of large number of iterations of a distribution will be approximately normally distributed. Here we can see that the histogram of 
+#Distribution:
+The distribution is approximately normal because the Central Limit Theoreom states that the means of large number of iterations of a distribution will be approximately normally distributed. Here we can see that the histogram of 
 means has a very Gaussian look, centered around the distribution mean
 
-```{r chart3}
+```{r chart3, echo=FALSE}
 hist(exp_means,
-     main=paste("Means from Exponential Distribution:\nSimulations:", num_sims , "\nSample Size:", n ,"\nRate:", lambda),
+     main=paste("Means from Exponential Distribution:\nSimulations:", 
+                num_sims , "\nSample Size:", n ,"\nRate:", lambda),
      xlab="Means",
      breaks=20)
 # add a vertical line at the theoretical mean
