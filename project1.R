@@ -116,7 +116,7 @@ avg_sample_var_means <- var(exp_means)
 #theory_sd <- 1/lambda
 numBreaks <- 100
 # plot the averages as density probabilities
-hist(exp_var
+hist(exp_means
      ,probability=TRUE
      ,breaks = numBreaks
      ,xlab="Variance"
