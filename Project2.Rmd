@@ -1,0 +1,21 @@
+---
+title: "ToothGrowth Analysis"
+author: "Gene Kaufman"
+date: "February 9, 2016"
+output: html_document
+---
+#Overview
+The ToothGrowth dataset was collected from a study researching the Effect of Vitamin C on Tooth Growth in Guinea Pigs, and published in 1947. The study looked at the effect of 3 dosage strengths (**dose**) administered one of two ways (**supp**). Each of the 6 combinations of dose x supp were administered to 10 Guinea Pigs. This paper will document some basic data analysis and make some conclusions on that data.
+
+#Loading data, basic exploratory data analysis
+Load the ToothGrowth data and perform some basic exploratory data analyses
+
+#Basic data summary
+Provide a basic summary of the data.
+
+#Compare tooth growth by supp and dose
+Use confidence intervals and/or hypothesis tests to compare tooth growth by supp and dose. (Only use the techniques from class, even if there's other approaches worth considering)
+
+#Conclusions
+State your conclusions and the assumptions needed for your conclusions.
+

@@ -1,6 +1,6 @@
-#library(datasets)
-#data(ToothGrowth)
-ToothGrowth<-read.csv("toothgrowth.data.csv")
+library(datasets)
+data(ToothGrowth)
+
 # set dose as a factor
 ToothGrowth$dose<-as.factor(ToothGrowth$dose)
 
