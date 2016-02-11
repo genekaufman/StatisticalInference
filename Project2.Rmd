@@ -2,20 +2,118 @@
 title: "ToothGrowth Analysis"
 author: "Gene Kaufman"
 date: "February 9, 2016"
-output: html_document
+output: pdf_document
 ---
 #Overview
 The ToothGrowth dataset was collected from a study researching the Effect of Vitamin C on Tooth Growth in Guinea Pigs, and published in 1947. The study looked at the effect of 3 dosage strengths (**dose**) administered one of two ways (**supp**). Each of the 6 combinations of dose x supp were administered to 10 Guinea Pigs. This paper will document some basic data analysis and make some conclusions on that data.
 
+```{r setoptions, message=FALSE, echo=FALSE}
+require(knitr)
+opts_chunk$set(echo=TRUE, results="asis", warning=FALSE, message=FALSE)
+```
 #Loading data, basic exploratory data analysis
 Load the ToothGrowth data and perform some basic exploratory data analyses
+```{r loaddata1, results="markup"}
+library(datasets)
+data(ToothGrowth)
+
+# set dose as a factor
+ToothGrowth$dose<-as.factor(ToothGrowth$dose)
+
+```
+
+```{r loaddata2, results="markup"}
+str(ToothGrowth)
+```
 
 #Basic data summary
 Provide a basic summary of the data.
 
-#Compare tooth growth by supp and dose
-Use confidence intervals and/or hypothesis tests to compare tooth growth by supp and dose. (Only use the techniques from class, even if there's other approaches worth considering)
+```{r summarydata1, results="markup"}
+summary(ToothGrowth)
+```
 
-#Conclusions
-State your conclusions and the assumptions needed for your conclusions.
+```{r summarydata2, results="markup"}
+table(ToothGrowth$supp, ToothGrowth$dose)
+```
+
+Boxplot of dose x length per supp
+
+```{r summarydata3}
+library(ggplot2)
+g<-ggplot(data=ToothGrowth,
+       aes(x=dose,y=len,fill=supp)) +
+  ylab("Tooth growth") + 
+  xlab("Dose (mg)") +
+  geom_boxplot() +
+  facet_grid(.~supp)
+print(g)
+```
+
+#Compare Tooth growth by Supplement Type and Dosage
+### Comparing Supplement Type
+
+Null hypothesis: The supplement type will have no effect on tooth growth
+
+```{r compare1, results="markup"}
+t.test(len~supp,
+       paired=F, 
+       var.equal=F,
+       data=ToothGrowth)
+```
+
+The confidence Interval of -0.1710156 , 7.5710156 contains 0 and the p-value is greater than 0.5, so we cannot reject the null hypothesis.
+
+### Comparing Dosage
+For this comparison, we need to compare each of the three dosages against each other in pairs. 
+
+**Compare 0.5mg, 1.0mg**
+
+Null hypothesis: A dosage of 0.5mg will show the same growth as a dosage of 1.0mg
+
+```{r compare2a, results="markup"}
+t.test(len ~ dose, paired = F, var.equal = F,
+           data = subset(ToothGrowth, dose %in% c(0.5, 1.0)))
+```
+
+The confidence Interval of -11.983781 , -6.276219 does NOT contain 0 and the p-value is less than 0.5, so we can reject the null hypothesis.
+
+**Compare 0.5mg, 2.0mg**
+
+Null hypothesis: A dosage of 0.5mg will show the same growth as a dosage of 2.0mg
+
+```{r compare2b, results="markup"}
+t.test(len ~ dose, paired = F, var.equal = F,
+           data = subset(ToothGrowth, dose %in% c(0.5, 2.0)))
+```
+
+The confidence Interval of -18.15617 , -12.83383 does NOT contain 0 and the p-value is less than 0.5, so we can reject the null hypothesis.
+
+**Compare 1.0mg, 2.0mg**
+
+Null hypothesis: A dosage of 1.0mg will show the same growth as a dosage of 2.0mg
+
+```{r compare2c, results="markup"}
+t.test(len ~ dose, paired = F, var.equal = F,
+           data = subset(ToothGrowth, dose %in% c(1.0, 2.0)))
+
+```
+
+The confidence Interval of -8.996481 , -3.733519 does NOT contain 0 and the p-value is less than 0.5, so we can reject the null hypothesis.
+
+#Conclusions & Assumptions
+
+**Conclusions**
+
+The data analysis shows that the evidence wasn't strong enough to suggest a difference in Supplement delivery types. However, the t-tests did show a positive correlation between dosage levels and tooth growth: the higher the dosage, the bigger the growth.
+
+**Assumptions**
+
+1. The sample guinea pigs were representative of the entire population.
+
+2. The sample animals were used only once for any combination of dosage and supplement.
+
+3. The samples were independently distributed
+
+4. The variances were different between the sample populations. 
 

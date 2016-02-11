@@ -14,6 +14,13 @@ print(tbl)
 
 #hist(ToothGrowth$len)
 
+Tooth.dose23 <- subset(ToothGrowth, dose %in% c(1.0, 2.0))
+TT<-t.test(len ~ dose, paired = F, var.equal = F,
+           data = subset(ToothGrowth, dose %in% c(1.0, 2.0)))
+print(TT)
+
+
+
 library(ggplot2)
 #boxplot of dose x length
 g<-ggplot(data=ToothGrowth,
